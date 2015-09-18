@@ -1,0 +1,64 @@
+c:>java textbuddy a.txt
+Invalid command: textbuddy a.txt
+c:>java TextBuddy a.txt
+Welcome to TextBuddy. a.txt is ready for use
+command: display
+a.txt is empty
+command: add jack is a boy
+added to a.txt: "jack is a boy"
+command: delete 2
+Index 2 does not exist
+command: add mary is a girl
+added to a.txt: "mary is a girl"
+command: delete 2
+deleted from a.txt: "mary is a girl"
+command: add mary is 11 yrs old girl
+added to a.txt: "mary is 11 yrs old girl"
+command: delete aa
+Index aa does not exist
+command: display
+1. jack is a boy
+2. mary is 11 yrs old girl
+command: delete 1
+deleted from a.txt: "jack is a boy"
+command: display
+1. mary is 11 yrs old girl
+command:       add        jump  over the moon
+added to a.txt: "jump  over the moon"
+command: display
+1. mary is 11 yrs old girl
+2. jump  over the moon
+command: delete      1
+deleted from a.txt: "mary is 11 yrs old girl"
+command: clear
+all content deleted from a.txt
+command: display
+a.txt is empty
+command:      add      michael jordan
+added to a.txt: "michael jordan"
+command: add scotti pipen
+added to a.txt: "scotti pipen"
+command: display
+1. michael jordan
+2. scotti pipen
+command: exit
+c:>java    TextBuddy     a.txt
+Welcome to TextBuddy. a.txt already exists
+command: display
+1. michael jordan
+2. scotti pipen
+command: clear
+all content deleted from a.txt
+command: exit
+c:>java TextBuddy a.txt
+Welcome to TextBuddy. a.txt already exists
+command: display
+a.txt is empty
+command: exit 2
+Invalid command: exit 2
+command: display 2
+Invalid command: display 2
+command: clear 2
+Invalid command: clear 2
+command: exit
+c:>java 
