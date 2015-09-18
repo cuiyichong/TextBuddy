@@ -11,7 +11,7 @@ public class TextBuddy {
 	public static void main(String[] args) {
 		
 		Scanner sc = new Scanner(System.in);
-		
+		//jdhshfjshfhshfksfkh
 		waitFileInput();
 		while(sc.hasNext()) {
 			
