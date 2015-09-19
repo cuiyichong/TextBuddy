@@ -94,8 +94,10 @@ public class TextBuddy {
 		return feedback;
 	}
 
-	private static String searchFromFile( String content, File file) {
-		
+private static String searchFromFile( String content, File file) {
+		if(content.length()==0) {
+			return "Cannot search nothing. Retry";
+		}
 		String str= new String();
 		StringBuilder sb = new StringBuilder();
 		try{		
