@@ -97,14 +97,18 @@ public class TextBuddy {
 	private static String searchFromFile( String content, File file) {
 		try{
 			String str= new String();
+			StringBuilder sb = new StringBuilder();
 			BufferedReader br = new BufferedReader(new FileReader(file.getName()));
 			while((str=br.readLine())!=null) {
 				if(str.split(" ")[1].equals(content)) {
-					br.close();
-					return str;
+					sb.append(str);
+					sb.append('\n');
+					
 				}
 			}
+			
 			br.close();
+			return sb.toString().trim();
 		}catch(IOException e){
 			e.printStackTrace();
 		}
