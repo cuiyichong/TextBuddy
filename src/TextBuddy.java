@@ -10,13 +10,17 @@ public class TextBuddy {
 	
 	private static Scanner sc = new Scanner(System.in);
 	private static final String EXIT_STRING = "00000";
+	private static final String MESSAGE_INVALID_COMMAND = "Invalid command: %s";
+	private static final String MESSAGE_FILE_CLEARED = "all content deleted from %s";
+	private static final String MESSAGE_ITEM_ADDED = "added to %s: \"%s\"";
+	private static final String MESSAGE_FILE_EMPTY ="%s is empty";
+	private static final String MESSAGE_ITEM_DELETED ="deleted from %s: \"%s\"";
+	private static final String MESSAGE_INDEX_NOT_EXIST = "Index %s does not exist";
 	
 	public static void main(String[] args) {
 		
-		
 		waitFileInput();
 		while(sc.hasNext()) {
-			
 			String command = sc.nextLine();
 			executeFileCommand(command);
 			waitFileInput();
@@ -33,38 +37,41 @@ public class TextBuddy {
 		if(fileAction.equalsIgnoreCase("TextBuddy")) {
 		
 			File newTextFile =new File(fileName);
-//			System.out.println(newTextFile.getPath());
-			System.out.print("Welcome to TextBuddy. ");
-			try{
-		    	
-		    	if(newTextFile.createNewFile()){
-		    		System.out.println(newTextFile.getName() + " is ready for use");
+			arrayList = prepareSystem(arrayList, newTextFile);
+			waitCommandInput();
+		    while(sc.hasNext())	{
+		    	String userCommand = sc.nextLine().trim();
+		    	String feedback = executeUserCommand(arrayList, newTextFile, userCommand);
+		    	if (feedback.equals(EXIT_STRING)) {
+		    		break;
 		    	}
-		    	else {
-		    		System.out.println(newTextFile.getName() + " already exists");
-		    		if(fileIsEmpty(newTextFile)==false) {
-		    			arrayList = loadToList(newTextFile);
-		    		}
-		    	}			    			
-		    	waitCommandInput();
-		    	
-		    	while(sc.hasNext())	{
-		    		String userCommand = sc.nextLine().trim();
-		    		String feedback = executeUserCommand(arrayList, newTextFile, userCommand);
-		    		if (feedback.equals(EXIT_STRING)) {
-		    			break;
-		    		}
-		    		feedbackToUser(feedback);
-		    		waitCommandInput();	
-		    	} 	
-		    }catch(IOException e){
-		    		e.printStackTrace();
-		    }
+		    	feedbackToUser(feedback);
+		    	waitCommandInput();	
+		    } 	
+		    
 		}
 		else { 
-			displayMessageInvalid(command);
+			feedbackToUser(String.format(MESSAGE_INVALID_COMMAND, command));
 		}
 		
+	}
+
+	public static ArrayList<String> prepareSystem(ArrayList<String> arrayList, File newTextFile) {
+		System.out.print("Welcome to TextBuddy. ");
+		try{
+			if(newTextFile.createNewFile()){
+				System.out.println(newTextFile.getName() + " is ready for use");
+			}
+			else {
+				System.out.println(newTextFile.getName() + " already exists");
+				if(fileIsEmpty(newTextFile)==false) {
+					arrayList = loadToList(newTextFile);
+				}
+			}			    			
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+		return arrayList;
 	}
 
 	public static String executeUserCommand(ArrayList<String> arrayList, File newTextFile, String userCommand) {
@@ -92,18 +99,20 @@ public class TextBuddy {
 			feedback = sortItemInFile(arrayList, newTextFile);
 		}
 		else {
-			feedback = "Invalid command: "+userCommand;
+			feedback = String.format(MESSAGE_INVALID_COMMAND, userCommand);
 		}
 		return feedback;
 	}
-
-private static String sortItemInFile(ArrayList<String> arrayList, File newTextFile) {
+	
+	// sort item in file alphabetically and case insensitively 
+	private static String sortItemInFile(ArrayList<String> arrayList, File newTextFile) {
 		Collections.sort(arrayList,String.CASE_INSENSITIVE_ORDER);
 		writeToFile(arrayList, newTextFile);
 		return "lines are sorted alphabetically";
 	}
 
-private static String searchFromFile( String content, File file) {
+	// support multiple existence of search item
+	private static String searchFromFile(String content, File file) {
 		if(content.length()==0) {
 			return "Cannot search nothing. Retry";
 		}
@@ -142,25 +151,21 @@ private static String searchFromFile( String content, File file) {
 	private static String clearText(ArrayList<String> arrayList, File file) {
 		arrayList.clear();
 		writeToFile(arrayList, file);
-		return "all content deleted from "+ file.getName();
+		return String.format(MESSAGE_FILE_CLEARED, file.getName());
 	}
-	
 	
 	private static String addToFile(ArrayList<String> arrayList, File file, String content) {
-		feedbackToUser(content);
+		if(content.length()==0) {
+			return "Nothing Added";
+		}
 		arrayList.add(content);
 		writeToFile(arrayList, file);
-		return "added to " + file.getName()+": \"" + content+'\"';
+		return String.format(MESSAGE_ITEM_ADDED, file.getName(), content);
 	}
-	
-	// display invalid message with the input message
-	private static void displayMessageInvalid(String str) {
-		System.out.println("Invalid command: "+str);
-	}
-	
+		
 	private static String display(File file) {
 		if(fileIsEmpty(file)) {
-			return file.getName() + " is empty";
+			return String.format(MESSAGE_FILE_EMPTY, file.getName());
 		}
 		else {
 			StringBuilder displayStr = new StringBuilder();
@@ -192,7 +197,7 @@ private static String searchFromFile( String content, File file) {
 
 	// If file of the same name exists under the directory, 
 	// load content in every line without index to arraylist
-	public static ArrayList<String> loadToList (File file) {
+	private static ArrayList<String> loadToList (File file) {
 		ArrayList<String> content = new ArrayList<String>();
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(file.getName()));
@@ -202,7 +207,7 @@ private static String searchFromFile( String content, File file) {
 			}
 			br.close();
 		}catch(IOException e){
-		e.printStackTrace();
+			e.printStackTrace();
 		}
 		return content;
 	}
@@ -239,23 +244,25 @@ private static String searchFromFile( String content, File file) {
 
 	// delete string at the content index from file only 
 	// when the string content is numeric, larger than 0 and content index exists  
-	public static String deleteFromFile(ArrayList<String> list, String content , File file) {
+	private static String deleteFromFile(ArrayList<String> list, String content , File file) {
+		if(content.length()==0) {
+			return "Nothing Deleted";
+		}
 		if(isNumeric(content)) {
 			int i = Integer.valueOf(content);
 			if (i<=list.size() && i>0) {
 				String removedStr = list.get(i-1);
 				list.remove(i-1);
 				writeToFile(list, file);
-				return "deleted from " + file.getName()+": \"" + removedStr +'\"';
+				return String.format(MESSAGE_ITEM_DELETED, file.getName(), removedStr);
 			
 			}
 		}
-		return "Index " + content + " does not exist";
+		return String.format(MESSAGE_INDEX_NOT_EXIST, content);
 	}
 
 // return true if string is numeric string including 0	
-	public static boolean isNumeric(String str)
-	{
+	private static boolean isNumeric(String str) {
 		String regex = "^[0-9]";
 		return str.matches(regex);
 	}

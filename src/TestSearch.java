@@ -19,8 +19,12 @@ public class TestSearch {
 //		assertEquals("all content deleted from b.txt",TextBuddy.executeUserCommand(list, file, "clear"));
 //      System.out.println(TextBuddy.executeUserCommand(list, file, "jack"));
 //		assertEquals("1. jack\n4. jack",TextBuddy.executeUserCommand(list, file, "Search jack"));
-		assertEquals("2. Lily",TextBuddy.executeUserCommand(list, file, "Search li"));
-		assertEquals("Cannot search nothing. Retry",TextBuddy.executeUserCommand(list, file, "Search"));
+		System.out.println(TextBuddy.executeUserCommand(list, file, "michael"));
+		assertEquals("3. michael",TextBuddy.executeUserCommand(list, file, "michael"));
+		assertEquals("1. jack\n4. jack",TextBuddy.executeUserCommand(list, file, "Search jack"));
+//		assertEquals("No such item",TextBuddy.executeUserCommand(list, file, "Search mike"));
+//		assertEquals("2. Lily",TextBuddy.executeUserCommand(list, file, "Search li"));
+//		assertEquals("Cannot search nothing. Retry",TextBuddy.executeUserCommand(list, file, "Search"));
 	}
 
 }
