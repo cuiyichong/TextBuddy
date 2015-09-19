@@ -95,24 +95,25 @@ public class TextBuddy {
 	}
 
 	private static String searchFromFile( String content, File file) {
-		try{
-			String str= new String();
-			StringBuilder sb = new StringBuilder();
+		
+		String str= new String();
+		StringBuilder sb = new StringBuilder();
+		try{		
 			BufferedReader br = new BufferedReader(new FileReader(file.getName()));
 			while((str=br.readLine())!=null) {
 				if(str.split(" ")[1].equals(content)) {
 					sb.append(str);
-					sb.append('\n');
-					
+					sb.append('\n');				
 				}
-			}
-			
+			}			
 			br.close();
-			return sb.toString().trim();
+			if(sb.length()!=0) {
+				return sb.toString().trim();
+			}
 		}catch(IOException e){
 			e.printStackTrace();
 		}
-		return null;
+		return "No such item";
 	}
 
 	private static void feedbackToUser(String feedback) {
