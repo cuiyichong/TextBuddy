@@ -101,7 +101,7 @@ public class TextBuddy {
 		try{		
 			BufferedReader br = new BufferedReader(new FileReader(file.getName()));
 			while((str=br.readLine())!=null) {
-				if(str.split(" ")[1].equals(content)) {
+				if(str.split(" ")[1].toLowerCase().contains(content.toLowerCase())) {
 					sb.append(str);
 					sb.append('\n');				
 				}
