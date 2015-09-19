@@ -14,10 +14,11 @@ public class TestSearch {
 		list.add("jack");
 		list.add("Lily");
 		list.add("michael");
+		list.add("jack");
 		TextBuddy.writeToFile(list, file);
 //		assertEquals("all content deleted from b.txt",TextBuddy.executeUserCommand(list, file, "clear"));
-System.out.println(TextBuddy.executeUserCommand(list, file, "jack"));
-		assertEquals("1. jack",TextBuddy.executeUserCommand(list, file, "Search jack"));
+//      System.out.println(TextBuddy.executeUserCommand(list, file, "jack"));
+		assertEquals("1. jack\n4. jack",TextBuddy.executeUserCommand(list, file, "Search jack"));
 	}
 
 }
