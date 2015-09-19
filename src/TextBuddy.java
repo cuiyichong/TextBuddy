@@ -33,6 +33,7 @@ public class TextBuddy {
 		if(fileAction.equalsIgnoreCase("TextBuddy")) {
 		
 			File newTextFile =new File(fileName);
+//			System.out.println(newTextFile.getPath());
 			System.out.print("Welcome to TextBuddy. ");
 			try{
 		    	
@@ -54,15 +55,12 @@ public class TextBuddy {
 		    			break;
 		    		}
 		    		feedbackToUser(feedback);
-		    		waitCommandInput();
-		    		
-		    	} 
-		    	
-		    	}catch(IOException e){
+		    		waitCommandInput();	
+		    	} 	
+		    }catch(IOException e){
 		    		e.printStackTrace();
-		    	}
-			}
-		
+		    }
+		}
 		else { 
 			displayMessageInvalid(command);
 		}
@@ -158,7 +156,7 @@ public class TextBuddy {
 
 	// If file of the same name exists under the directory, 
 	// load content in every line without index to arraylist
-	private static ArrayList<String> loadToList (File file) {
+	public static ArrayList<String> loadToList (File file) {
 		ArrayList<String> content = new ArrayList<String>();
 		try {
 			BufferedReader bw = new BufferedReader(new FileReader(file.getName()));
@@ -225,5 +223,5 @@ public class TextBuddy {
 		String regex = "^[0-9]";
 		return str.matches(regex);
 	}
-
+	
 } 
