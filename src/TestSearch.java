@@ -15,7 +15,9 @@ public class TestSearch {
 		list.add("Lily");
 		list.add("michael");
 		TextBuddy.writeToFile(list, file);
-		assertEquals("1. jack",TextBuddy.excuteUserCommand(list, file, "Jack"));
+//		assertEquals("all content deleted from b.txt",TextBuddy.executeUserCommand(list, file, "clear"));
+System.out.println(TextBuddy.executeUserCommand(list, file, "jack"));
+		assertEquals("1. jack",TextBuddy.executeUserCommand(list, file, "Search jack"));
 	}
 
 }

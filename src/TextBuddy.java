@@ -50,7 +50,7 @@ public class TextBuddy {
 		    	
 		    	while(sc.hasNext())	{
 		    		String userCommand = sc.nextLine().trim();
-		    		String feedback = excuteUserCommand(arrayList, newTextFile, userCommand);
+		    		String feedback = executeUserCommand(arrayList, newTextFile, userCommand);
 		    		if (feedback.equals(EXIT_STRING)) {
 		    			break;
 		    		}
@@ -67,7 +67,7 @@ public class TextBuddy {
 		
 	}
 
-	public static String excuteUserCommand(ArrayList<String> arrayList, File newTextFile, String userCommand) {
+	public static String executeUserCommand(ArrayList<String> arrayList, File newTextFile, String userCommand) {
 		String feedback;
 		String commandType = getFirstWord(userCommand);
 		String content = getSecondWord(userCommand);
@@ -85,10 +85,30 @@ public class TextBuddy {
 		else if(commandType.equalsIgnoreCase("delete")) {
 			feedback = deleteFromFile(arrayList, content ,newTextFile);
 		}
+		else if(commandType.equalsIgnoreCase("search")) {
+			feedback = searchFromFile(content, newTextFile);
+		}
 		else {
 			feedback = "Invalid command: "+userCommand;
 		}
 		return feedback;
+	}
+
+	private static String searchFromFile( String content, File file) {
+		try{
+			String str= new String();
+			BufferedReader br = new BufferedReader(new FileReader(file.getName()));
+			while((str=br.readLine())!=null) {
+				if(str.split(" ")[1].equals(content)) {
+					br.close();
+					return str;
+				}
+			}
+			br.close();
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	private static void feedbackToUser(String feedback) {
@@ -159,12 +179,12 @@ public class TextBuddy {
 	public static ArrayList<String> loadToList (File file) {
 		ArrayList<String> content = new ArrayList<String>();
 		try {
-			BufferedReader bw = new BufferedReader(new FileReader(file.getName()));
+			BufferedReader br = new BufferedReader(new FileReader(file.getName()));
 			String str;
-			while((str=bw.readLine())!=null) {
+			while((str=br.readLine())!=null) {
 				content.add(getSecondWord(str).trim());
 			}
-			bw.close();
+			br.close();
 		}catch(IOException e){
 		e.printStackTrace();
 		}
