@@ -11,7 +11,7 @@ public class TextBuddy {
 	public static void main(String[] args) {
 		
 		Scanner sc = new Scanner(System.in);
-		//jdhshfjshfhshfksfkh
+		
 		waitFileInput();
 		while(sc.hasNext()) {
 			
@@ -46,31 +46,30 @@ public class TextBuddy {
 		    	waitCommandInput();
 		    	
 		    	while(sc.hasNext())	{
-		    		
-		    		String userCommand = sc.nextLine();
-		    		userCommand = userCommand.trim();
+		    		String feedback = "";
+		    		String userCommand = sc.nextLine().trim();
+		    		String commandType = getFirstWord(userCommand);
+		    		String content = getSecondWord(userCommand);
+		    		System.out.println(commandType);
+		    		System.out.println(content);
 		    		if(userCommand.equals("exit") )
 		    			break;
-		    		else if(userCommand.equals("display")) {
-	    				display(newTextFile);
+		    		else if(commandType.equals("display")) {
+	    				feedback = display(newTextFile);
 	    			}
-		    		else if(userCommand.equals("clear")) {
-	    				clearText(arrayList, newTextFile);
+		    		else if(commandType.equals("clear")) {
+	    				feedback = clearText(arrayList, newTextFile);
 	    			}
-		    		else {
-		    			String action = getFirstWord(userCommand);
-			    		String content = getSecondWord(userCommand);
-
-		    			if(action.equals("add")) {
-		    				addToFile(arrayList, newTextFile, content);
-		    			}
-		    			else if(action.equals("delete")) {
-		    				deleteFromFile(arrayList, content ,newTextFile);
-		    			}
-		    			 
-		    			else
-							displayMessageInvalid(userCommand);
+		    		else if(commandType.equals("add")) {
+		    			feedback = addToFile(arrayList, newTextFile, content);
 		    		}
+		    		else if(commandType.equals("delete")){
+		    			feedback = deleteFromFile(arrayList, content ,newTextFile);
+		    		}
+		    		else {
+		    			feedback = "Invalid command: "+userCommand;
+		    		}
+		    		System.out.println(feedback);
 		    		waitCommandInput();
 		  
 		    	} 
@@ -94,17 +93,18 @@ public class TextBuddy {
 		System.out.print("c:>java ");
 	}
 
-	private static void clearText(ArrayList<String> arrayList, File file) {
+	private static String clearText(ArrayList<String> arrayList, File file) {
 		arrayList.clear();
 		writeToFile(arrayList, file);
-		System.out.println("all content deleted from "+ file.getName());
+		return "all content deleted from "+ file.getName();
 	}
 	
 	
-	private static void addToFile(ArrayList<String> arrayList, File file, String content) {
+	private static String addToFile(ArrayList<String> arrayList, File file, String content) {
+		System.out.println(content);
 		arrayList.add(content);
 		writeToFile(arrayList, file);
-		System.out.println("added to " + file.getName()+": \"" + content+'\"');
+		return "added to " + file.getName()+": \"" + content+'\"';
 	}
 	
 	// display invalid message with the input message
@@ -112,34 +112,36 @@ public class TextBuddy {
 		System.out.println("Invalid command: "+str);
 	}
 	
-	private static void display(File file) {
+	private static String display(File file) {
 		if(fileIsEmpty(file)) {
-			System.out.println(file.getName() + " is empty");
+			return file.getName() + " is empty";
 		}
 		else {
+			StringBuilder displayStr = new StringBuilder();
 			try{
 				String str= new String();
 				BufferedReader br = new BufferedReader(new FileReader(file.getName()));
 				while((str=br.readLine())!=null) {
-					System.out.println(str);
+					displayStr.append(str);
+					displayStr.append('\n');
 				}
 				br.close();
 			}catch(IOException e){
 				e.printStackTrace();
 			}
+			return displayStr.toString().trim();
 		}
 	}
 	
 	// return first keyword of command
 	private static String getFirstWord(String command) {
-		String[] array = command.trim().split(" ", 2);
-		return array[0].trim();
+		String commandTypeString = command.trim().split(" ")[0];
+		return commandTypeString;
 	}
 
 	// return second keyword of command
 	private static String getSecondWord(String command) {
-		String[] array = command.trim().split(" ", 2);
-		return array[1].trim();
+		return command.replace(getFirstWord(command), "").trim();
 	}
 
 	// If file of the same name exists under the directory, 
@@ -191,21 +193,18 @@ public class TextBuddy {
 
 	// delete string at the content index from file only 
 	// when the string content is numeric, larger than 0 and content index exists  
-	public static void deleteFromFile(ArrayList<String> list, String content , File file) {
+	public static String deleteFromFile(ArrayList<String> list, String content , File file) {
+		System.out.println(content);
 		if(isNumeric(content)) {
 			int i = Integer.valueOf(content);
 			if (i<=list.size() && i>0) {
-				System.out.println("deleted from " + file.getName()+": \"" + list.get(i-1)+'\"');
 				list.remove(i-1);
 				writeToFile(list, file);
+				return "deleted from " + file.getName()+": \"" + list.get(i-1)+'\"';
 			
 			}
-			else
-				System.out.println("Index " + content + " does not exist");
 		}
-		else {
-			System.out.println("Index " + content + " does not exist");
-		}
+		return "Index " + content + " does not exist";
 	}
 
 // return true if string is numeric string including 0	
