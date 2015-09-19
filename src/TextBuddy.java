@@ -88,10 +88,19 @@ public class TextBuddy {
 		else if(commandType.equalsIgnoreCase("search")) {
 			feedback = searchFromFile(content, newTextFile);
 		}
+		else if(commandType.equalsIgnoreCase("sort")) {
+			feedback = sortItemInFile(arrayList, newTextFile);
+		}
 		else {
 			feedback = "Invalid command: "+userCommand;
 		}
 		return feedback;
+	}
+
+private static String sortItemInFile(ArrayList<String> arrayList, File newTextFile) {
+		Collections.sort(arrayList,String.CASE_INSENSITIVE_ORDER);
+		writeToFile(arrayList, newTextFile);
+		return "lines are sorted alphabetically";
 	}
 
 private static String searchFromFile( String content, File file) {

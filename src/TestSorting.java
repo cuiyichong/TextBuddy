@@ -17,16 +17,16 @@ public class TestSorting {
 		list.add("jet");
 		TextBuddy.writeToFile(list, file);
 		
-		File sorted = new File("sorted.txt");
+		File sortedFile = new File("sorted.txt");
 		ArrayList<String> sortedList =new ArrayList<String>();
-		list.add("jack");
-		list.add("jet");
-		list.add("Lily");
-		list.add("michael");
-		TextBuddy.writeToFile(sortedList, file);
+		sortedList.add("jack");
+		sortedList.add("jet");
+		sortedList.add("Lily");
+		sortedList.add("michael");
+		TextBuddy.writeToFile(sortedList, sortedFile);
 		
 		assertEquals("lines are sorted alphabetically",TextBuddy.executeUserCommand(list, file, "Sort"));
-		assertEquals(sorted,file);
+		assertEquals(TextBuddy.executeUserCommand(list, file, "display"),TextBuddy.executeUserCommand(sortedList, sortedFile, "display"));
 	}
 
 }
